@@ -4,19 +4,13 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TodosModule } from './services/todos/todos.module';
 import { TodosController } from './services/todos/todos.controller';
-import { LoggerMiddleware } from './middleware/logger.middleware';
-import { getEnvPath } from './common/helper/env.helper';
-import configuration from './config/configuration';
-
-const envFilePath: string = getEnvPath(`${__dirname}/common/envs`);
+import { LoggerMiddleware } from './middleware/logger.middleware';  
 
 @Module({
   imports: [
     TodosModule,
     ConfigModule.forRoot({
-      load: [configuration],
-      // envFilePath,
-      // isGlobal: true
+      isGlobal: true,
     })
   ],
   controllers: [AppController],
