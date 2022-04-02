@@ -7,7 +7,7 @@ export class AppService {
   public config: ConfigService;
 
   getHello(): string {
-    const databaseName: string = this.config.get('DATABASE_NAME'); 
-    return databaseName;
+    const message = "Hello"
+    return message;
   }
 }
