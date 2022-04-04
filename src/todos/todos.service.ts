@@ -5,8 +5,21 @@ import { v4 as uuidv4 } from 'uuid';
 export class TodosService {
   private todos: any[] = [];
 
-  getAllTodo(): any[] {
-    return this.todos;
+  getTodos(title: string, sequence: number): any[] {
+    const todos = this.todos.filter((todo) => {
+      let isMatch = true;
+      if (title && todo.title != title) {
+        isMatch = false;
+      }
+
+      if (sequence && todo.sequence != sequence) {
+        isMatch = false;
+      }
+
+      return isMatch;
+    })
+
+    return todos;
   }
 
   getTodo(id: string) {
@@ -39,6 +52,6 @@ export class TodosService {
 
   deleteTodo(id: string) {
     const todoIdx = this.findTodoById(id);
-    this.todos.splice(todoIdx, 1);
+    this.todos.splice(todoIdx, 1); 
   }
 }
