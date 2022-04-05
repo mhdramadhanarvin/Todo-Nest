@@ -6,6 +6,7 @@ import {
   Post,
   Put,
   Delete,
+  Query,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -18,8 +19,11 @@ export class TodosController {
   constructor(private todosService: TodosService) {}
 
   @Get()
-  getAllTodos() {
-    return this.todosService.getAllTodo();
+  getAllTodos(
+    @Query('title') title: string,
+    @Query('sequence') sequence: number,
+  ) {
+    return this.todosService.getTodos(title, sequence);
   }
 
   @Get('/:id')
@@ -31,7 +35,6 @@ export class TodosController {
   @UsePipes(ValidationPipe)
   createTodo(@Body() payload: CreateTodoDto) {
     this.todosService.createTodo(payload);
-    return this.todosService.getAllTodo();
   }
 
   @Put('/:id')
