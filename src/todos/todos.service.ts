@@ -1,5 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
+import { CreateTodoDto } from './dto/create-todo.dto';
+import { UpdateTodoDto } from './dto/update-todo.dto';
 
 @Injectable()
 export class TodosService {
@@ -14,7 +16,8 @@ export class TodosService {
     return this.todos[todoIdx];
   }
 
-  createTodo(title: string, sequence: number) {
+  createTodo(createTodoDto: CreateTodoDto) {
+    const { title, sequence } = createTodoDto;
     this.todos.push({
       id: uuidv4(),
       title,
@@ -22,7 +25,8 @@ export class TodosService {
     });
   }
 
-  updateTodo(id: string, title: string, sequence: number) {
+  updateTodo(id: string, updateTodoDto: UpdateTodoDto) {
+    const { title, sequence } = updateTodoDto;
     const todoIdx = this.findTodoById(id);
     this.todos[todoIdx].title = title;
     this.todos[todoIdx].sequence = sequence;
@@ -33,7 +37,6 @@ export class TodosService {
     if (todoIdx === -1) {
       throw new NotFoundException(`Todo with id ${id} not found`);
     }
-
     return todoIdx;
   }
 

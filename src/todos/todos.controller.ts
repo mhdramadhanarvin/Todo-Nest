@@ -6,7 +6,11 @@ import {
   Post,
   Put,
   Delete,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
+import { CreateTodoDto } from './dto/create-todo.dto';
+import { UpdateTodoDto } from './dto/update-todo.dto';
 import { TodosService } from './todos.service';
 
 @Controller('todos')
@@ -24,18 +28,15 @@ export class TodosController {
   }
 
   @Post()
-  createTodo(@Body('title') title: string, @Body('sequence') sequence: number) {
-    this.todosService.createTodo(title, sequence);
+  @UsePipes(ValidationPipe)
+  createTodo(@Body() payload: CreateTodoDto) {
+    this.todosService.createTodo(payload);
     return this.todosService.getAllTodo();
   }
 
   @Put('/:id')
-  updateTodo(
-    @Param('id') id: string,
-    @Body('title') title: string,
-    @Body('sequence') sequence: number,
-  ) {
-    this.todosService.updateTodo(id, title, sequence);
+  updateTodo(@Param('id') id: string, @Body() payload: UpdateTodoDto) {
+    this.todosService.updateTodo(id, payload);
     return this.todosService.getTodo(id);
   }
 
