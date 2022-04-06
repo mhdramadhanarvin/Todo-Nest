@@ -32,7 +32,6 @@ export class TodosController {
   }
 
   @Post()
-  @UsePipes(ValidationPipe)
   createTodo(@Body() payload: CreateTodoDto) {
     this.todosService.createTodo(payload);
   }
