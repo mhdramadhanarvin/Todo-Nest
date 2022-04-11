@@ -11,6 +11,7 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { CreateTodoDto } from './dto/create-todo.dto';
+import { FilterTodoDto } from './dto/filter-todo.dto';
 import { UpdateTodoDto } from './dto/update-todo.dto';
 import { TodosService } from './todos.service';
 
@@ -20,10 +21,9 @@ export class TodosController {
 
   @Get()
   getAllTodos(
-    @Query('title') title: string,
-    @Query('sequence') sequence: number,
+    @Query() filter: FilterTodoDto,
   ) {
-    return this.todosService.getTodos(title, sequence);
+    return this.todosService.getTodos(filter);
   }
 
   @Get('/:id')
@@ -33,7 +33,7 @@ export class TodosController {
 
   @Post()
   createTodo(@Body() payload: CreateTodoDto) {
-    this.todosService.createTodo(payload);
+    this.todosService.createTodo(payload); 
   }
 
   @Put('/:id')

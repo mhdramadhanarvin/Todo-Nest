@@ -7,7 +7,8 @@ import { UpdateTodoDto } from './dto/update-todo.dto';
 export class TodosService {
   private todos: any[] = [];
 
-  getTodos(title: string, sequence: number): any[] {
+  getTodos(filter): any[] {
+    const { title, sequence } = filter;
     const todos = this.todos.filter((todo) => {
       let isMatch = true;
       if (title && todo.title != title) {
