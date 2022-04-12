@@ -26,24 +26,24 @@ export class TodosController {
     return this.todosService.getTodos(filter);
   }
 
-  @Get('/:id')
-  getTodos(@Param('id') id: string) {
-    return this.todosService.getTodo(id);
-  }
+  // @Get('/:id')
+  // getTodos(@Param('id') id: string) {
+  //   return this.todosService.getTodo(id);
+  // }
 
   @Post()
   createTodo(@Body() payload: CreateTodoDto) {
     this.todosService.createTodo(payload); 
   }
 
-  @Put('/:id')
-  updateTodo(@Param('id') id: string, @Body() payload: UpdateTodoDto) {
-    this.todosService.updateTodo(id, payload);
-    return this.todosService.getTodo(id);
-  }
+  // @Put('/:id')
+  // updateTodo(@Param('id') id: string, @Body() payload: UpdateTodoDto) {
+  //   this.todosService.updateTodo(id, payload);
+  //   return this.todosService.getTodo(id);
+  // }
 
-  @Delete('/:id')
-  deleteTodo(@Param('id') id: string) {
-    this.todosService.deleteTodo(id);
-  }
+  // @Delete('/:id')
+  // deleteTodo(@Param('id') id: string) {
+  //   this.todosService.deleteTodo(id);
+  // }
 }

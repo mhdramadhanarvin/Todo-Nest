@@ -1,61 +1,59 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { v4 as uuidv4 } from 'uuid';
 import { CreateTodoDto } from './dto/create-todo.dto';
+import { FilterTodoDto } from './dto/filter-todo.dto';
 import { UpdateTodoDto } from './dto/update-todo.dto';
+import { TodoRepository } from './repository/todo.repository';
+import { Todo } from './entity/todo.entity';
 
 @Injectable()
 export class TodosService {
-  private todos: any[] = [];
 
-  getTodos(filter): any[] {
-    const { title, sequence } = filter;
-    const todos = this.todos.filter((todo) => {
-      let isMatch = true;
-      if (title && todo.title != title) {
-        isMatch = false;
-      }
+  constructor(
+    @InjectRepository(TodoRepository)
+    private readonly todoRepository: TodoRepository
+  ) { }
 
-      if (sequence && todo.sequence != sequence) {
-        isMatch = false;
-      }
-
-      return isMatch;
-    })
-
-    return todos;
+  async getTodos(filter: FilterTodoDto): Promise<Todo[]> {
+    return await this.todoRepository.getTodos(filter);
   }
 
-  getTodo(id: string) {
-    const todoIdx = this.findTodoById(id);
-    return this.todos[todoIdx];
+  async createTodo(createTodoDto: CreateTodoDto): Promise<void> {
+    return await this.todoRepository.createTodo(createTodoDto);
   }
 
-  createTodo(createTodoDto: CreateTodoDto) {
-    const { title, sequence } = createTodoDto;
-    this.todos.push({
-      id: uuidv4(),
-      title,
-      sequence,
-    });
-  }
+  // getTodo(id: string) {
+  //   const todoIdx = this.findTodoById(id);
+  //   return this.todos[todoIdx];
+  // }
 
-  updateTodo(id: string, updateTodoDto: UpdateTodoDto) {
-    const { title, sequence } = updateTodoDto;
-    const todoIdx = this.findTodoById(id);
-    this.todos[todoIdx].title = title;
-    this.todos[todoIdx].sequence = sequence;
-  }
+  // createTodo(createTodoDto: CreateTodoDto) {
+  //   const { title, sequence } = createTodoDto;
+  //   this.todos.push({
+  //     id: uuidv4(),
+  //     title,
+  //     sequence,
+  //   });
+  // }
 
-  findTodoById(id: string) {
-    const todoIdx = this.todos.findIndex((todo) => todo.id === id);
-    if (todoIdx === -1) {
-      throw new NotFoundException(`Todo with id ${id} not found`);
-    }
-    return todoIdx;
-  }
+  // updateTodo(id: string, updateTodoDto: UpdateTodoDto) {
+  //   const { title, sequence } = updateTodoDto;
+  //   const todoIdx = this.findTodoById(id);
+  //   this.todos[todoIdx].title = title;
+  //   this.todos[todoIdx].sequence = sequence;
+  // }
 
-  deleteTodo(id: string) {
-    const todoIdx = this.findTodoById(id);
-    this.todos.splice(todoIdx, 1); 
-  }
+  // findTodoById(id: string) {
+  //   const todoIdx = this.todos.findIndex((todo) => todo.id === id);
+  //   if (todoIdx === -1) {
+  //     throw new NotFoundException(`Todo with id ${id} not found`);
+  //   }
+  //   return todoIdx;
+  // }
+
+  // deleteTodo(id: string) {
+  //   const todoIdx = this.findTodoById(id);
+  //   this.todos.splice(todoIdx, 1); 
+  // }
 }
