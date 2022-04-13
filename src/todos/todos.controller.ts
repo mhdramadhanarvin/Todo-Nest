@@ -14,36 +14,37 @@ import { CreateTodoDto } from './dto/create-todo.dto';
 import { FilterTodoDto } from './dto/filter-todo.dto';
 import { UpdateTodoDto } from './dto/update-todo.dto';
 import { TodosService } from './todos.service';
+import { Todo } from './entity/todo.entity';
+import { UUIDValidationPipe } from './pipes/uuid-validation.pipe';
 
 @Controller('todos')
 export class TodosController {
-  constructor(private todosService: TodosService) {}
+  constructor(private todosService: TodosService) { }
 
   @Get()
-  getAllTodos(
+  async getAllTodos(
     @Query() filter: FilterTodoDto,
-  ) {
+  ): Promise<Todo[]> {
     return this.todosService.getTodos(filter);
   }
 
-  // @Get('/:id')
-  // getTodos(@Param('id') id: string) {
-  //   return this.todosService.getTodo(id);
-  // }
-
-  @Post()
-  createTodo(@Body() payload: CreateTodoDto) {
-    this.todosService.createTodo(payload); 
+  @Get('/:id')
+  async getTodos(@Param('id', UUIDValidationPipe) id: string): Promise<Todo> {
+    return this.todosService.getTodoById(id);
   }
 
-  // @Put('/:id')
-  // updateTodo(@Param('id') id: string, @Body() payload: UpdateTodoDto) {
-  //   this.todosService.updateTodo(id, payload);
-  //   return this.todosService.getTodo(id);
-  // }
+  @Post()
+  async createTodo(@Body() payload: CreateTodoDto): Promise<void> {
+    return this.todosService.createTodo(payload);
+  }
 
-  // @Delete('/:id')
-  // deleteTodo(@Param('id') id: string) {
-  //   this.todosService.deleteTodo(id);
-  // }
+  @Put('/:id')
+  async updateTodo(@Param('id', UUIDValidationPipe) id: string, @Body() payload: UpdateTodoDto): Promise<void> {
+    return this.todosService.updateTodo(id, payload); 
+  }
+
+  @Delete('/:id')
+  async deleteTodo(@Param('id', UUIDValidationPipe) id: string): Promise<void> {
+    return this.todosService.deleteTodo(id);
+  }
 }

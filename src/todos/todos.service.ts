@@ -6,6 +6,7 @@ import { FilterTodoDto } from './dto/filter-todo.dto';
 import { UpdateTodoDto } from './dto/update-todo.dto';
 import { TodoRepository } from './repository/todo.repository';
 import { Todo } from './entity/todo.entity';
+import { title } from 'process';
 
 @Injectable()
 export class TodosService {
@@ -23,37 +24,31 @@ export class TodosService {
     return await this.todoRepository.createTodo(createTodoDto);
   }
 
-  // getTodo(id: string) {
-  //   const todoIdx = this.findTodoById(id);
-  //   return this.todos[todoIdx];
-  // }
+  async getTodoById(id: string): Promise<Todo> {
+    const todo = await this.todoRepository.findOne(id);
 
-  // createTodo(createTodoDto: CreateTodoDto) {
-  //   const { title, sequence } = createTodoDto;
-  //   this.todos.push({
-  //     id: uuidv4(),
-  //     title,
-  //     sequence,
-  //   });
-  // }
+    if (!todo) {
+      throw new NotFoundException(`Todo with id ${id} not found`);
+    }
 
-  // updateTodo(id: string, updateTodoDto: UpdateTodoDto) {
-  //   const { title, sequence } = updateTodoDto;
-  //   const todoIdx = this.findTodoById(id);
-  //   this.todos[todoIdx].title = title;
-  //   this.todos[todoIdx].sequence = sequence;
-  // }
+    return todo;
+  }
+  
+  async updateTodo(id: string, updateTodo): Promise<void> {
+    const { title, sequence } = updateTodo;
+    
+    const todo = await this.getTodoById(id);
+    todo.title = title;
+    todo.sequence = sequence;
 
-  // findTodoById(id: string) {
-  //   const todoIdx = this.todos.findIndex((todo) => todo.id === id);
-  //   if (todoIdx === -1) {
-  //     throw new NotFoundException(`Todo with id ${id} not found`);
-  //   }
-  //   return todoIdx;
-  // }
+    await todo.save();
+  }
 
-  // deleteTodo(id: string) {
-  //   const todoIdx = this.findTodoById(id);
-  //   this.todos.splice(todoIdx, 1); 
-  // }
+  async deleteTodo(id: string): Promise<void> {
+    const result = await this.todoRepository.delete(id);
+    
+    if(result.affected == 0) {
+      throw new NotFoundException(`Todo with id ${id} not found`);
+    }
+  }
 }
