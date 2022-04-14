@@ -4,9 +4,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 // import { AppService } from './app.service';
 import { typeOrmConfig } from './config/typeorm.config';
 import { TodosModule } from './todos/todos.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
-  imports: [TypeOrmModule.forRoot(typeOrmConfig), TodosModule],
+  imports: [TypeOrmModule.forRoot(typeOrmConfig), TodosModule, UsersModule],
   // controllers: [AppController],
   // providers: [AppService],
 })
