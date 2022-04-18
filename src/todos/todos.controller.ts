@@ -9,6 +9,8 @@ import {
   Query,
   UsePipes,
   ValidationPipe,
+  Req,
+  UseGuards,
 } from '@nestjs/common';
 import { CreateTodoDto } from './dto/create-todo.dto';
 import { FilterTodoDto } from './dto/filter-todo.dto';
@@ -16,15 +18,20 @@ import { UpdateTodoDto } from './dto/update-todo.dto';
 import { TodosService } from './todos.service';
 import { Todo } from './entity/todo.entity';
 import { UUIDValidationPipe } from './pipes/uuid-validation.pipe';
+import { AuthGuard } from '@nestjs/passport';
+import { GetUser } from 'src/auth/get-user.decorator';
+import { JwtGuard } from 'src/guard/jwt.guard';
 
 @Controller('todos')
+@UseGuards(JwtGuard)
 export class TodosController {
   constructor(private todosService: TodosService) { }
 
   @Get()
   async getAllTodos(
-    @Query() filter: FilterTodoDto,
+    @Query() filter: FilterTodoDto, @GetUser() user
   ): Promise<Todo[]> {
+    console.log(user)
     return this.todosService.getTodos(filter);
   }
 
@@ -47,4 +54,4 @@ export class TodosController {
   async deleteTodo(@Param('id', UUIDValidationPipe) id: string): Promise<void> {
     return this.todosService.deleteTodo(id);
   }
-}
+} 
