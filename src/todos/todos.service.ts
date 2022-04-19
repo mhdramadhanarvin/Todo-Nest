@@ -7,6 +7,7 @@ import { UpdateTodoDto } from './dto/update-todo.dto';
 import { TodoRepository } from './repository/todo.repository';
 import { Todo } from './entity/todo.entity';
 import { title } from 'process';
+import { User } from 'src/users/entity/user.entity';
 
 @Injectable()
 export class TodosService {
@@ -16,36 +17,24 @@ export class TodosService {
     private readonly todoRepository: TodoRepository
   ) { }
 
-  async getTodos(filter: FilterTodoDto): Promise<Todo[]> {
-    return await this.todoRepository.getTodos(filter);
+  async getTodos(user: User, filter: FilterTodoDto): Promise<Todo[]> {
+    return await this.todoRepository.getTodos(user, filter);
   }
 
-  async createTodo(createTodoDto: CreateTodoDto): Promise<void> {
-    return await this.todoRepository.createTodo(createTodoDto);
+  async createTodo(user: User, createTodoDto: CreateTodoDto): Promise<void> {
+    return await this.todoRepository.createTodo(user, createTodoDto);
   }
 
-  async getTodoById(id: string): Promise<Todo> {
-    const todo = await this.todoRepository.findOne(id);
-
-    if (!todo) {
-      throw new NotFoundException(`Todo with id ${id} not found`);
-    }
-
-    return todo;
+  async getTodoById(user: User, id: string): Promise<Todo> {
+    return await this.todoRepository.getTodoById(user, id);
   }
   
-  async updateTodo(id: string, updateTodo): Promise<void> {
-    const { title, sequence } = updateTodo;
-    
-    const todo = await this.getTodoById(id);
-    todo.title = title;
-    todo.sequence = sequence;
-
-    await todo.save();
+  async updateTodo(user: User, id: string, updateTodo): Promise<void> {
+    return await this.todoRepository.updateTodo(user, id, updateTodo); 
   }
 
-  async deleteTodo(id: string): Promise<void> {
-    const result = await this.todoRepository.delete(id);
+  async deleteTodo(user: User, id: string): Promise<void> { 
+    const result = await this.todoRepository.delete({ id, user });
     
     if(result.affected == 0) {
       throw new NotFoundException(`Todo with id ${id} not found`);
