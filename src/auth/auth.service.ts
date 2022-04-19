@@ -14,6 +14,7 @@ import { RefreshAccessTokenDto } from './dto/refresh-access-token.dto';
 import { LoginResponse } from './interface/login-response.interface';
 import { RefreshTokenRepository } from './repository/refresh-token.repository';
 import { TokenExpiredError } from 'jsonwebtoken';
+import { GetUser } from './get-user.decorator';
 
 @Injectable()
 export class AuthService {

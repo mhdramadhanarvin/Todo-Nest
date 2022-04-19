@@ -1,4 +1,5 @@
-import { Entity, BaseEntity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { User } from 'src/users/entity/user.entity';
+import { Entity, BaseEntity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 
 @Entity()
 export class Todo extends BaseEntity {
@@ -10,4 +11,7 @@ export class Todo extends BaseEntity {
 
     @Column()
     sequence: number; 
+
+    @ManyToOne(() => User, (user) => user.todos)
+    user: User;
 } 

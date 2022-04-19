@@ -30,8 +30,7 @@ export class TodosController {
   @Get()
   async getAllTodos(
     @Query() filter: FilterTodoDto, @GetUser() user
-  ): Promise<Todo[]> {
-    console.log(user)
+  ): Promise<Todo[]> { 
     return this.todosService.getTodos(filter);
   }
 
