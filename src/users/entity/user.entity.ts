@@ -7,6 +7,7 @@ import {
 } from "typeorm";
 import * as bcrypt from 'bcrypt';
 import { RefreshToken } from "src/auth/entity/refresh-token.entity";
+import { Todo } from "src/todos/entity/todo.entity";
 
 @Entity()
 export class User extends BaseEntity {
@@ -30,8 +31,11 @@ export class User extends BaseEntity {
   })
   refreshTokens: RefreshToken[];
 
+  @OneToMany(() => Todo, (todo) => todo.user) 
+  todos: Todo[];
+
   async validatePassword(password: string): Promise<boolean> {
     const hash = await bcrypt.hash(password, this.salt);
     return hash === this.password;
   }
-}
+} 
