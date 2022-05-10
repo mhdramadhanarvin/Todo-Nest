@@ -14,10 +14,10 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         username: configService.get('DB_USER'),
         password: configService.get('DB_PASS'),
         database: configService.get('DB_NAME'),
-        entities: [__dirname + '/**/*.entity.{ts,js}'],
+        entities: [__dirname + '/../**/*.entity.{ts,js}'],
         synchronize: true
       }),
     }),
   ],
 })
-export class DatabaseModule { }
+export class TypeOrmConfig { }
